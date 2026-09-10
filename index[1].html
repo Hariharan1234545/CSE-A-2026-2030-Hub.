@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CSE-A Student Hub</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#07111f;color:#eaf2ff}
+header{padding:28px 7%;background:linear-gradient(135deg,#0b1f38,#123c63);border-bottom:1px solid #234d73}
+nav{display:flex;justify-content:space-between;align-items:center;gap:15px}.logo{font-size:24px;font-weight:800}.logo span{color:#4fd1ff}
+nav button,.btn{border:0;border-radius:10px;padding:11px 16px;background:#24a8e8;color:white;font-weight:700;cursor:pointer}
+.hero{padding:60px 7%;display:grid;grid-template-columns:1.5fr 1fr;gap:30px;align-items:center}
+h1{font-size:clamp(38px,6vw,68px);margin:10px 0}.accent{color:#4fd1ff}.hero p{font-size:18px;color:#a9bdd3;line-height:1.6}
+.card{background:#0d1c2e;border:1px solid #203b57;border-radius:18px;padding:22px;box-shadow:0 10px 30px #0003}
+.grid{padding:20px 7% 60px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card h3{margin-top:5px}.icon{font-size:32px}
+.section{padding:25px 7%}.quiz{max-width:800px;margin:auto}.option{display:block;width:100%;margin:10px 0;padding:14px;text-align:left;background:#12263d;color:white;border:1px solid #31516f;border-radius:10px;cursor:pointer}.option:hover{background:#193653}.result{margin-top:15px;font-weight:bold}
+footer{text-align:center;padding:25px;color:#7890a8;border-top:1px solid #1d354d}
+.modal{position:fixed;inset:0;background:#000b;display:none;place-items:center;padding:20px}.modal.show{display:grid}.modal .card{width:min(480px,100%)}input{width:100%;padding:13px;margin:8px 0;background:#081522;border:1px solid #31516f;color:white;border-radius:9px}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.hero{padding-top:35px}}
+</style>
+</head>
+<body>
+<header><nav><div class="logo">CSE<span>-A</span> HUB</div><button onclick="openLogin()">Student Login</button></nav></header>
+
+<section class="hero">
+<div><div class="accent">2026 — 2030 • COMPUTER SCIENCE</div><h1>Your Class.<br><span class="accent">Your Hub.</span></h1>
+<p>A modern student portal for CSE-A — quizzes, notes, announcements, resources and class activities in one place.</p>
+<button class="btn" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take C Quiz →</button></div>
+<div class="card"><div class="icon">⚡</div><h2>Welcome, CSE-A!</h2><p>Build skills. Compete with friends. Learn together.</p><hr><p>🏆 Weekly Quiz &nbsp; • &nbsp; 💻 Coding Practice</p></div>
+</section>
+
+<section class="grid">
+<div class="card"><div class="icon">📝</div><h3>Quick Quiz</h3><p>Test your C programming knowledge with instant scoring.</p></div>
+<div class="card"><div class="icon">📚</div><h3>Study Resources</h3><p>Keep notes, lab manuals and useful links organized.</p></div>
+<div class="card"><div class="icon">🏆</div><h3>Leaderboard</h3><p>Turn learning into a friendly class challenge.</p></div>
+<div class="card"><div class="icon">📢</div><h3>Announcements</h3><p>Important class updates in one place.</p></div>
+<div class="card"><div class="icon">📅</div><h3>Class Planner</h3><p>Track upcoming labs, assignments and events.</p></div>
+<div class="card"><div class="icon">🤖</div><h3>Tech Corner</h3><p>Discover useful AI and developer tools.</p></div>
+</section>
+
+<section class="section" id="quiz"><div class="card quiz"><div class="accent">C PROGRAMMING • MINI QUIZ</div><h2 id="question">Loading...</h2><div id="options"></div><div class="result" id="result"></div><button class="btn" id="next" onclick="nextQuestion()" style="display:none">Next Question</button></div></section>
+
+<footer>CSE-A Student Hub • Built as a student innovation project 🚀</footer>
+
+<div class="modal" id="login"><div class="card"><h2>Student Login</h2><p>Demo login — connect this to Google/Firebase for real authentication.</p>
+<input id="name" placeholder="Enter your name"><input id="email" placeholder="College Gmail">
+<button class="btn" onclick="login()">Enter Hub</button> <button class="btn" style="background:#33485e" onclick="closeLogin()">Cancel</button>
+<p id="welcome"></p></div></div>
+
+<script>
+const qs=[
+["Which symbol ends a C statement?",[".",":",";","#"],2],
+["Which function is the starting point of a C program?",["start()","main()","run()","begin()"],1],
+["Which format specifier prints an integer?",["%f","%c","%s","%d"],3],
+["Which keyword declares a constant variable?",["const","fixed","constant","let"],0],
+["Which operator is used for logical AND?",["&","&&","||","!"],1]
+];
+let i=0,score=0,answered=false;
+function render(){answered=false;document.getElementById("result").textContent="";document.getElementById("next").style.display="none";document.getElementById("question").textContent=(i+1)+". "+qs[i][0];let o=document.getElementById("options");o.innerHTML="";qs[i][1].forEach((x,n)=>{let b=document.createElement("button");b.className="option";b.textContent=String.fromCharCode(65+n)+". "+x;b.onclick=()=>answer(n);o.appendChild(b)})}
+function answer(n){if(answered)return;answered=true;let r=document.getElementById("result");if(n===qs[i][2]){score++;r.textContent="✅ Correct!"}else r.textContent="❌ Not quite. Correct answer: "+qs[i][1][qs[i][2]];document.getElementById("next").style.display="inline-block"}
+function nextQuestion(){if(i<qs.length-1){i++;render()}else{document.getElementById("question").textContent="Quiz Complete 🎉";document.getElementById("options").innerHTML="";document.getElementById("result").textContent=`Your score: ${score}/${qs.length}`;document.getElementById("next").style.display="none"}}
+function openLogin(){document.getElementById("login").classList.add("show")}
+function closeLogin(){document.getElementById("login").classList.remove("show")}
+function login(){let n=document.getElementById("name").value.trim()||"Student";document.getElementById("welcome").textContent="Welcome, "+n+"! 🚀";setTimeout(closeLogin,900)}
+render();
+</script>
+</body></html>
